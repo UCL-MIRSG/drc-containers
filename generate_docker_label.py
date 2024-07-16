@@ -33,14 +33,15 @@ def main():
         if file.endswith(".json"):
             with open(file) as f:
                 command_object = json.load(f)
-                command_string = json.dumps(command_object).\
-                    replace('"', r'\"').replace('$', r'\$')
+                command_string = (
+                    json.dumps(command_object).replace('"', r"\"").replace("$", r"\$")
+                )
                 command_list.append(command_string)
 
-    commands = ', \\\n\t'.join(command_list)
+    commands = ", \\\n\t".join(command_list)
     label = f'org.nrg.commands="[{commands}]"'
     print(f"LABEL {label}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

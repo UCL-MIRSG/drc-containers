@@ -22,13 +22,13 @@ class XnatContainerCredentials(XnatCredentials):
     container"""
 
     def __init__(self):
-        username = os.getenv('XNAT_USER')
+        username = os.getenv("XNAT_USER")
         if not username:
             raise ValueError("No username in environment variable XNAT_USER")
-        password = os.getenv('XNAT_PASS')
+        password = os.getenv("XNAT_PASS")
         if not password:
             raise ValueError("No password in environment variable XNAT_PASS")
-        host = os.getenv('XNAT_HOST')
+        host = os.getenv("XNAT_HOST")
         if not host:
             raise ValueError("No host in environment variable XNAT_HOST")
         super().__init__(username=username, password=password, host=host)
@@ -42,8 +42,10 @@ def open_xnat_session(credentials: XnatCredentials):
             using XNAT container service
 
     """
-    return xnat.connect(server=credentials.host,
-                        user=credentials.username,
-                        password=credentials.password,
-                        extension_types=True,
-                        verify=credentials.verify_ssl)
+    return xnat.connect(
+        server=credentials.host,
+        user=credentials.username,
+        password=credentials.password,
+        extension_types=True,
+        verify=credentials.verify_ssl,
+    )
