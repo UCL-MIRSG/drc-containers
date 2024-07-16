@@ -1,8 +1,9 @@
 # Python image to use in both stages
-ARG python=python:3.9.19-alpine3.20
+ARG PYTHON_IMAGE=python
+ARG PYTHON_VERSION=3.9.19-alpine3.20
 
 # Build stage
-FROM ${python} AS builder
+FROM ${PYTHON_IMAGE}:${PYTHON_VERSION} AS builder
 
 # Create python virtual environment
 RUN python3 -m venv /opt/venv
@@ -11,10 +12,10 @@ ENV PATH=/opt/venv/bin:$PATH
 # Install package and its dependencies
 WORKDIR /build
 COPY . .
-RUN pip install .
+RUN pip install --no-cache-dir .
 
 # Runtime stage
-FROM ${python}
+FROM ${PYTHON_IMAGE}:${PYTHON_VERSION}
 
 # Copy the python virtual environment from the builder
 COPY --from=builder /opt/venv /opt/venv
