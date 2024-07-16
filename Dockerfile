@@ -1,6 +1,6 @@
 # Python image to use in both stages
 ARG PYTHON_IMAGE=python
-ARG PYTHON_VERSION=3.9.19-alpine3.20
+ARG PYTHON_VERSION=3.10-alpine3.20
 
 # Build stage
 FROM ${PYTHON_IMAGE}:${PYTHON_VERSION} AS builder
