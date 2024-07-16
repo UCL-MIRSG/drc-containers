@@ -1,0 +1,14 @@
+[project]
+name = "drc-containers"
+version = "0.0.1"
+dependencies = [
+    "xnat",
+    "pyxnat",
+    "pandas"
+]
+
+[project.scripts]
+share_subject_to_genetic_project = "drc_containers:share_subject_to_genetic_project.main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
