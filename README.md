@@ -22,7 +22,15 @@ arguments. These can be read in using Python's `sys.argv`. Note that this is an
 array and the first argument is the function being executed
 
 If you need to add additional python module dependencies, you will need to
-configure these in `pyproject.toml`
+configure these in `pyproject.toml` in the `[project]` section, e.g.:
+```toml
+[project]
+dependencies = [
+    "pandas",
+    "pyxnat",
+    "xnat",
+]
+```
 
 To test your script locally, you can either run it on the command line with the
 above XNAT environment variables set for your XNAT server and user name and
