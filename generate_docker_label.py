@@ -34,7 +34,10 @@ def main():
             with open(file) as f:
                 command_object = json.load(f)
                 command_string = (
-                    json.dumps(command_object).replace('"', r"\"").replace("$", r"\$")
+                    json.dumps(command_object)
+                    .replace("\\", "\\\\")
+                    .replace('"', '\\"')
+                    .replace("$", "\\$")
                 )
                 command_list.append(command_string)
 

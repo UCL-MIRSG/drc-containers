@@ -44,9 +44,8 @@ jobs:
                       command_list.append(command_string)
 
           commands = ','.join(command_list)
-          label = f'org.nrg.commands=[{commands}]'
           with open(os.environ['GITHUB_OUTPUT'], 'a') as github_output:
-              print(f"label={label}", file=github_output)
+              print(f"nrglabel=[{commands}]", file=github_output)
         shell: python
 
       # Log into the container registry
@@ -59,22 +58,22 @@ jobs:
 
       # Extract metadata (tags and labels) to be applied to the image. See [docker/metadata-action](https://github.com/docker/metadata-action#about)
       # The `id` "meta" allows the output of this step to be referenced in a subsequent step. The `images` value provides the base name for the tags and labels.
+      # The current version does not allow for labels to be added containing the # symbol, so we add the
+      # custom nrg label in the build-push-action below
       - name: Extract metadata for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          #          labels: |
-          #            # set xnat container service label defining commands in this image
-          #            ${{ steps.xnat-command-label.outputs.label }}
+          # labels: 'org.nrg.commands=${{ steps.xnat-command-label.outputs.nrglabel }}'
           tags: |
             # set latest tag for default branch
             type=raw,value=latest,enable={{is_default_branch}}
 
       # Build the image from the Dockerfile in the repo and push to the container registry.
       # The `context` parameter defines the build's context as the set of files located in the
-      # specified path. For more information, see
-      # "[Usage](https://github.com/docker/build-push-action#usage)" in the README of the
+      # specified path. For more information,
+      # see "[Usage](https://github.com/docker/build-push-action#usage)" in the README of the
       # `docker/build-push-action` repository.
       # Tag and label the image using the output from the metadata step above
       - name: Build and push Docker image
@@ -84,4 +83,6 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          labels: |
+            ${{ steps.meta.outputs.labels }}
+            org.nrg.commands=${{ steps.xnat-command-label.outputs.nrglabel }}
