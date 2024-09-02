@@ -14,6 +14,6 @@ jobs:
     timeout-minutes: 2
     steps:
       - name: Check links
-        uses: UCL-MIRSG/.github/actions/links@f1eea08573626b08d2c0419d6cd365ea07d7dadd # v0
+        uses: UCL-MIRSG/.github/actions/links@152e9ea07a635bb00bf64c31adc1f313e3cdd355 # v0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
