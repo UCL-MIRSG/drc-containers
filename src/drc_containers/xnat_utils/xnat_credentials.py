@@ -2,6 +2,7 @@ import os
 from dataclasses import dataclass
 
 import xnat
+from pyxnat import Interface
 
 
 @dataclass
@@ -49,3 +50,15 @@ def open_xnat_session(credentials: XnatCredentials):
         extension_types=True,
         verify=credentials.verify_ssl,
     )
+
+
+def open_pyxnat_session(credentials: XnatCredentials) -> Interface:
+    """Initiate XNAT session using credentials set by XNAT container service
+
+    Args:
+        credentials:
+    """
+    return Interface(server=credentials.host,
+                     user=credentials.username,
+                     password=credentials.password,
+                     verify=credentials.verify_ssl)
