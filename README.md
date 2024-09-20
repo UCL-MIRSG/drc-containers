@@ -175,4 +175,4 @@ commands will be available on subject pages.
 
 ## Licence
 
-See [LICENSE.txt](`./LICENSE.txt`)
+See [LICENSE.txt](./LICENSE.txt)
