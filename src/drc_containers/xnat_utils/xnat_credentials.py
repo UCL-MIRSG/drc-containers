@@ -32,7 +32,11 @@ class XnatContainerCredentials(XnatCredentials):
         host = os.getenv("XNAT_HOST")
         if not host:
             raise ValueError("No host in environment variable XNAT_HOST")
-        super().__init__(username=username, password=password, host=host)
+        verify = os.getenv("XNAT_VERIFY_SSL", default="True")
+        verify = verify.lower() not in ["n", "no", "false", "f", "0"]
+        super().__init__(
+            username=username, password=password, host=host, verify_ssl=verify
+        )
 
 
 def open_xnat_session(credentials: XnatCredentials):
@@ -58,7 +62,9 @@ def open_pyxnat_session(credentials: XnatCredentials) -> Interface:
     Args:
         credentials:
     """
-    return Interface(server=credentials.host,
-                     user=credentials.username,
-                     password=credentials.password,
-                     verify=credentials.verify_ssl)
+    return Interface(
+        server=credentials.host,
+        user=credentials.username,
+        password=credentials.password,
+        verify=credentials.verify_ssl,
+    )
