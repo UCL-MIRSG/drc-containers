@@ -9,8 +9,9 @@ requires-python = ">3.10"
 version = "0.0.1"
 
 [project.scripts]
-share_subject_to_genetic_project = "drc_containers:share_subject_to_genetic_project.main"
+email_listmode = "drc_containers:email_listmode.main"
 email_radreads = "drc_containers:email_radreads.main"
+share_subject_to_genetic_project = "drc_containers:share_subject_to_genetic_project.main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
