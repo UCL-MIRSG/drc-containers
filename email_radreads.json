@@ -1,0 +1,60 @@
+{
+  "name": "email-radreads",
+  "description": "Send email listing sessions without radreads",
+  "label": "Send email listing sessions without radreads",
+  "version": "1.0",
+  "schema-version": "1.0",
+  "type": "docker",
+  "command-line": "email_radreads #PROJECTID# #EMAILLIST#",
+  "image": "ghcr.io/ucl-mirsg/drc-containers:latest",
+  "override-entrypoint": true,
+  "mounts": [],
+  "inputs": [
+    {
+      "name": "PROJECTID",
+      "description": "Project ID",
+      "type": "string",
+      "user-settable": false,
+      "required": true,
+      "replacement-key": "#PROJECTID#"
+    },
+    {
+      "name": "EMAILLIST",
+      "description": "Comma separated list of email addresses",
+      "type": "string",
+      "user-settable": true,
+      "required": true,
+      "replacement-key": "#EMAILLIST#"
+    }
+  ],
+  "outputs": [],
+  "xnat": [
+    {
+      "name": "project-email-radreads",
+      "label": "Send email listing sessions without radreads",
+      "description": "Send email listing sessions without radreads",
+      "contexts": ["xnat:projectData"],
+      "external-inputs": [
+        {
+          "name": "project",
+          "description": "Input project",
+          "type": "Project",
+          "required": true,
+          "load-children": false
+        }
+      ],
+      "derived-inputs": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "derived-from-wrapper-input": "project",
+          "derived-from-xnat-object-property": "id",
+          "provides-value-for-command-input": "PROJECTID",
+          "user-settable": false,
+          "required": true
+        }
+      ],
+      "output-handlers": []
+    }
+  ]
+}
