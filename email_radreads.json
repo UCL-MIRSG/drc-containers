@@ -1,8 +1,8 @@
 {
   "name": "email-radreads",
   "description": "Send email listing sessions without radreads",
-  "label": "Send email listing sessions without radreads",
-  "version": "1.0",
+  "label": "Radreads email",
+  "version": "1.1",
   "schema-version": "1.0",
   "type": "docker",
   "command-line": "email_radreads #PROJECTID# #EMAILLIST#",
@@ -11,7 +11,7 @@
   "mounts": [],
   "inputs": [
     {
-      "name": "PROJECTID",
+      "name": "project-id",
       "description": "Project ID",
       "type": "string",
       "user-settable": false,
@@ -19,7 +19,7 @@
       "replacement-key": "#PROJECTID#"
     },
     {
-      "name": "EMAILLIST",
+      "name": "email-list",
       "description": "Comma separated list of email addresses",
       "type": "string",
       "user-settable": true,
@@ -30,9 +30,9 @@
   "outputs": [],
   "xnat": [
     {
-      "name": "project-email-radreads",
-      "label": "Send email listing sessions without radreads",
-      "description": "Send email listing sessions without radreads",
+      "name": "email-radreads-project",
+      "label": "Send radreads email",
+      "description": "Send email listing sessions requiring radreads",
       "contexts": ["xnat:projectData"],
       "external-inputs": [
         {
@@ -45,11 +45,11 @@
       ],
       "derived-inputs": [
         {
-          "name": "project-id",
+          "name": "project-identifier",
           "type": "string",
           "derived-from-wrapper-input": "project",
           "derived-from-xnat-object-property": "id",
-          "provides-value-for-command-input": "PROJECTID",
+          "provides-value-for-command-input": "project-id",
           "user-settable": false,
           "required": true
         }

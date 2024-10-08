@@ -95,6 +95,17 @@ def check_session(
 def get_listmode_issues(
     pyxnat_interface: Interface, threshold_days: int, project_name: str
 ) -> set[ListModeRecord]:
+    """
+
+    Args:
+        pyxnat_interface: current pyxnat session
+        threshold_days: check only sessions created within this number of days
+        project_name: name of project in which to check sessions
+
+    Returns:
+        set of ListModeRecords, each describing a session with missing listmode
+            data
+    """
     session_datatypes = [
         "xnat:crSessionData",
         "xnat:mrSessionData",
@@ -156,6 +167,7 @@ def email_listmode(
     project_name: str,
     email_subject: str,
     to_emails: list[str],
+    threshold_days: int = 90,
     cc_emails: list[str] = None,
     bcc_emails: list[str] = None,
     debug_output: bool = True,
@@ -165,6 +177,7 @@ def email_listmode(
     Args:
         credentials: XNAT host name and user login details
         project_name: The project to search for sessions
+        threshold_days: check only sessions created within this number of days
         email_subject: subject line of email
         to_emails: list of email addresses. XNAT will only send emails
             to addresses which already correspond to XNAT users on the server
@@ -178,7 +191,9 @@ def email_listmode(
     with open_pyxnat_session(credentials=credentials) as xnat_session:
         # Get list of ListModeRecords
         sessions_to_report = get_listmode_issues(
-            pyxnat_interface=xnat_session, threshold_days=90, project_name=project_name
+            pyxnat_interface=xnat_session,
+            threshold_days=threshold_days,
+            project_name=project_name,
         )
 
         if debug_output:
@@ -213,18 +228,31 @@ def email_listmode(
 
 
 def main():
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 4:
         raise ValueError("No email list specified")
+    to_emails = sys.argv[3].split(",")
+
+    if len(sys.argv) < 3:
+        raise ValueError("No threshold days specified")
+    threshold_days_str = sys.argv[2]
+
     if len(sys.argv) < 2:
         raise ValueError("No project name specified")
+    project_name = sys.argv[1]
+
+    try:
+        threshold_days = int(threshold_days_str)
+    except ValueError:
+        raise ValueError("Invalid input for threshold days: " "{threshold_days_str}")
 
     credentials = XnatContainerCredentials()
 
     email_listmode(
         credentials=credentials,
-        project_name=sys.argv[1],
+        project_name=project_name,
+        threshold_days=threshold_days,
         email_subject="1946 Weekly Listmode Status Check",
-        to_emails=sys.argv[2].split(","),
+        to_emails=to_emails,
     )
 
 

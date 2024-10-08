@@ -1,17 +1,17 @@
 {
   "name": "email-listmode",
-  "description": "Send email with listmode warnings",
-  "label": "Send email with listmode warnings",
-  "version": "1.0",
+  "description": "Send email listing subjects with missing listmode data",
+  "label": "Listmode email",
+  "version": "1.1",
   "schema-version": "1.0",
   "type": "docker",
-  "command-line": "email_listmode #PROJECTID# #EMAILLIST#",
+  "command-line": "email_listmode #PROJECTID# #THRESHOLDDAYS# #EMAILLIST#",
   "image": "ghcr.io/ucl-mirsg/drc-containers:latest",
   "override-entrypoint": true,
   "mounts": [],
   "inputs": [
     {
-      "name": "PROJECTID",
+      "name": "project-id",
       "description": "Project ID",
       "type": "string",
       "user-settable": false,
@@ -19,20 +19,29 @@
       "replacement-key": "#PROJECTID#"
     },
     {
-      "name": "EMAILLIST",
+      "name": "email-list",
       "description": "Comma separated list of email addresses",
       "type": "string",
       "user-settable": true,
       "required": true,
       "replacement-key": "#EMAILLIST#"
+    },
+    {
+      "name": "threshold-days",
+      "description": "Only check sessions created within this number of days",
+      "type": "number",
+      "user-settable": true,
+      "required": true,
+      "replacement-key": "#THRESHOLDDAYS#",
+      "default-value": 90
     }
   ],
   "outputs": [],
   "xnat": [
     {
-      "name": "project-email-listmode",
-      "label": "Send email with listmode warnings",
-      "description": "Send email with listmode warnings",
+      "name": "email-listmode-project",
+      "label": "Send listmode email",
+      "description": "Send email listing subjects with missing listmode data",
       "contexts": ["xnat:projectData"],
       "external-inputs": [
         {
@@ -45,11 +54,11 @@
       ],
       "derived-inputs": [
         {
-          "name": "project-id",
+          "name": "project-identifier",
           "type": "string",
           "derived-from-wrapper-input": "project",
           "derived-from-xnat-object-property": "id",
-          "provides-value-for-command-input": "PROJECTID",
+          "provides-value-for-command-input": "project-id",
           "user-settable": false,
           "required": true
         }
