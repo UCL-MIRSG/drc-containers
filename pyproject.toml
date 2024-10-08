@@ -6,9 +6,10 @@ dependencies = [
 ]
 name = "drc-containers"
 requires-python = ">3.10"
-version = "0.0.2"
+version = "0.0.3"
 
 [project.scripts]
+email_chenies = "drc_containers:email_chenies.main"
 email_listmode = "drc_containers:email_listmode.main"
 email_radreads = "drc_containers:email_radreads.main"
 share_subject_to_genetic_project = "drc_containers:share_subject_to_genetic_project.main"
