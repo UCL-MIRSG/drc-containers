@@ -5,7 +5,7 @@
   "version": "1.1",
   "schema-version": "1.0",
   "type": "docker",
-  "command-line": "email_radreads #PROJECTID# #EMAILLIST#",
+  "command-line": "email_radreads \"#PROJECTID#\" \"#EXCLUDESESSIONS#\" \"#EMAILLIST#\"",
   "image": "ghcr.io/ucl-mirsg/drc-containers:latest",
   "override-entrypoint": true,
   "mounts": [],
@@ -17,6 +17,15 @@
       "user-settable": false,
       "required": true,
       "replacement-key": "#PROJECTID#"
+    },
+    {
+      "name": "exclude-sessions",
+      "description": "Comma-separated list of strings. Exclude sessions labels containing any of these strings",
+      "type": "string",
+      "user-settable": true,
+      "required": true,
+      "replacement-key": "#EXCLUDESESSIONS#",
+      "default-value": "_MR_20151215,_MR_20151111"
     },
     {
       "name": "email-list",

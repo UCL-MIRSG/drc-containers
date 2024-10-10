@@ -1,8 +1,9 @@
-import sys
+from argparse import ArgumentParser
 from dataclasses import dataclass
 
 from pyxnat import Interface
 
+from drc_containers.xnat_utils.command_line import string_to_list
 from drc_containers.xnat_utils.email import send_email
 from drc_containers.xnat_utils.xnat_credentials import (
     XnatContainerCredentials,
@@ -158,13 +159,13 @@ def construct_email_body(
     """Assemble the email html content with links to the sessions
 
     Args:
-        server_url: URL of the XNAT server
-        project_name: name of the XNAT project
-        session_records: set of SessionRecords describing sessions which shoulf
-            be linked in the email
+        server_url: Full URL of the XNAT server
+        project_name: ID of the XNAT project
+        session_records: set of SessionRecords describing sessions to be linked
+            in the email
 
     Returns:
-        str containing the email body as HTML
+        String containing the email body as HTML
     """
     body_html = (
         "<p>The following sessions in the 1946 XNAT database require "
@@ -184,7 +185,7 @@ def construct_email_body(
     return body_html
 
 
-def email_radreads(
+def run_email_radreads(
     credentials: XnatCredentials,
     project_name: str,
     email_subject: str,
@@ -195,6 +196,11 @@ def email_radreads(
     debug_output: bool = True,
 ):
     """Email notification about image sessions without radreads
+
+    The XNAT project "project_name" is searched for PET/PET-MR/MR sessions
+    which do not have a corresponding Radiological Read. They are listed
+    in an email sent to the email addresses. Email addresses must
+    correspond to registered XNAT users.
 
     Args:
         credentials: XNAT host name and user login details
@@ -246,19 +252,53 @@ def email_radreads(
             )
 
 
-def main():
-    if len(sys.argv) < 3:
-        raise ValueError("No email list specified")
-    if len(sys.argv) < 2:
-        raise ValueError("No project name specified")
+def main(args=None):
+    """Entrypoint for email_radreads, as listed in pyproject.toml.
+
+    Args:
+        args: list of arguments. If not set these wil be read from the
+            command-line
+
+    When called by the container, this method is called with no arguments, so
+    args is set to None. ArgParser will read arguments from the command line.
+
+    The command-lone arguments are:
+        email_radreads project exclude_sessions email_list
+
+        where:
+            project is the ID of the project containing the sessions
+            exclude_sessions is a comma-delimited list of substrings. A
+                session is excluded from the checks if its label contains any
+                of the substrings
+            email_list is a comma-delimited string containing the email
+                addresses where the email will be sent
+
+        For example:
+            email_radreads "PROJ" "user1@foo.org,user2@foo.org"
+
+    For testing, main() can be called with an argument list to simulate
+    command-line arguments, eg:
+        main(['PROJ', 'user1@foo.org,user2@foo.org'])
+
+    """
+    parser = ArgumentParser()
+    parser.add_argument("project")
+    parser.add_argument("exclude_sessions")
+    parser.add_argument("email_list")
+    parsed = parser.parse_args(args)
+
+    project_name = parsed.project
+    exclude_sessions = string_to_list(parsed.exclude_sessions)
+    to_emails = string_to_list(parsed.email_list)
 
     credentials = XnatContainerCredentials()
-    email_radreads(
+
+    run_email_radreads(
         credentials=credentials,
-        project_name=sys.argv[1],
+        project_name=project_name,
         email_subject="1946 update: Weekly Radiology Reads Email",
-        to_emails=sys.argv[2].split(","),
-        exclude_session_substrings=["_MR_20151215", "_MR_20151111"],
+        to_emails=to_emails,
+        exclude_session_substrings=exclude_sessions,
     )
 
 
