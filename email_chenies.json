@@ -5,7 +5,7 @@
   "version": "1.1",
   "schema-version": "1.0",
   "type": "docker",
-  "command-line": "email_chenies #PROJECTID# #EMAILLIST#",
+  "command-line": "email_chenies \"#PROJECTID#\" \"#MRPROJECTIDLIST#\" \"#EMAILLIST#\"",
   "image": "ghcr.io/ucl-mirsg/drc-containers:latest",
   "override-entrypoint": true,
   "mounts": [],
@@ -17,6 +17,15 @@
       "user-settable": false,
       "required": true,
       "replacement-key": "#PROJECTID#"
+    },
+    {
+      "name": "mr-project-ids",
+      "description": "Comma separated list of project IDs for the projects which contain the Chenies Mews MR data",
+      "type": "string",
+      "user-settable": true,
+      "required": true,
+      "replacement-key": "#MRPROJECTIDLIST#",
+      "default-value": "CHENIES_TRANSFER,CHENIES_MRI"
     },
     {
       "name": "email-list",
