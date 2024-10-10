@@ -2,7 +2,7 @@
   "name": "email-listmode",
   "description": "Send email listing subjects with missing listmode data",
   "label": "Listmode email",
-  "version": "1.1",
+  "version": "1.2",
   "schema-version": "1.0",
   "type": "docker",
   "command-line": "email_listmode \"#PROJECTID#\" \"#THRESHOLDDAYS#\" \"#EMAILLIST#\"",

@@ -2,7 +2,7 @@
   "name": "email-chenies",
   "description": "Send email listing subjects with phase 3 data and no Chenies Mews MR data",
   "label": "Chenies Mews email",
-  "version": "1.1",
+  "version": "1.2",
   "schema-version": "1.0",
   "type": "docker",
   "command-line": "email_chenies \"#PROJECTID#\" \"#MRPROJECTIDLIST#\" \"#EMAILLIST#\"",
