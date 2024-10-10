@@ -12,4 +12,4 @@ def string_to_list(arg: str) -> list[str]:
     Returns:
         list of strings extracted from the input string
     """
-    return [a for a in re.split(r'[;,\s]+', arg) if a]
+    return [a for a in re.split(r"[;,\s]+", arg) if a]
