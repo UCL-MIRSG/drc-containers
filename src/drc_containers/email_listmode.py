@@ -1,10 +1,11 @@
-import sys
+from argparse import ArgumentParser
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
 from pyxnat import Interface
 from pyxnat.core.resources import Experiments
 
+from drc_containers.xnat_utils.command_line import string_to_list
 from drc_containers.xnat_utils.email import send_email
 from drc_containers.xnat_utils.xnat_credentials import (
     open_pyxnat_session,
@@ -95,7 +96,7 @@ def check_session(
 def get_listmode_issues(
     pyxnat_interface: Interface, threshold_days: int, project_name: str
 ) -> set[ListModeRecord]:
-    """
+    """Get list of sessions which have errors in the listmode data
 
     Args:
         pyxnat_interface: current pyxnat session
@@ -154,12 +155,29 @@ def get_listmode_issues(
     return issue_list
 
 
-def construct_email(list_mode_records: set[ListModeRecord]) -> str:
-    body = "<p>"
+def construct_email(
+    server_url: str, project_name: str, list_mode_records: set[ListModeRecord]
+) -> str:
+    """Assemble the email html content with links to the subjects
+
+    Args:
+        server_url: Full URL of the XNAT server
+        project_name: ID of the XNAT project
+        list_mode_records: set of ListModeRecord to be linked in the email
+
+    Returns:
+        String containing the email body as HTML
+    """
+    body_html = "<p>"
 
     for session in list_mode_records:
-        body += f"Subject ID:{session.subject_id}   Scan Date:{session.date} Errors:{session.errors}<br>"
-    return body
+        link_form = (
+            f"{server_url}/data/projects/{project_name}"
+            f"/subjects/{session.subject_id}"
+        )
+
+        body_html += f'<a href="{link_form}">Subject ID:{session.subject_id}</a> &nbsp; Scan Date:{session.date} Errors:{session.errors}<br>'
+    return body_html
 
 
 def email_listmode(
@@ -173,6 +191,10 @@ def email_listmode(
     debug_output: bool = True,
 ):
     """Email notification about image sessions with listmode errors
+
+    Sessions created within the number of days set by threshold_days are
+    checked for missing or incorrect listmode data. Any errors found are
+    listed in an email sent to the specified email addresses.
 
     Args:
         credentials: XNAT host name and user login details
@@ -206,7 +228,11 @@ def email_listmode(
 
         if len(sessions_to_report) > 0:
             # Construct email html body
-            body_html = construct_email(list_mode_records=sessions_to_report)
+            body_html = construct_email(
+                server_url=credentials.host,
+                project_name=project_name,
+                list_mode_records=sessions_to_report,
+            )
 
             # Print email content so it is visible in the container log
             print("Sending email with the following content:")
@@ -227,18 +253,44 @@ def email_listmode(
             )
 
 
-def main():
-    if len(sys.argv) < 4:
-        raise ValueError("No email list specified")
-    to_emails = sys.argv[3].split(",")
+def main(args=None):
+    """Entrypoint for email_listmode, as listed in pyproject.toml.
 
-    if len(sys.argv) < 3:
-        raise ValueError("No threshold days specified")
-    threshold_days_str = sys.argv[2]
+    Args:
+        args: list of arguments. If not set these wil be read from the
+            command-line
 
-    if len(sys.argv) < 2:
-        raise ValueError("No project name specified")
-    project_name = sys.argv[1]
+    When called by the container, this method is called with no arguments, so
+    args is set to None. ArgParser will read arguments from the command line.
+
+    The command-lone arguments are:
+        email_listmode project threshold_days email_list
+
+        where:
+            project is the ID of the project containing the PET-MR
+                sessions
+            threshold_days only recent sessions will be checked. This is the
+                threshold for the number of days prior to the current date
+            email_list is a comma-delimited string containing the email
+                addresses where the email will be sent
+
+        For example:
+            email_listmode "PROJID" "90" "user1@foo.org,user2@foo.org"
+
+    For testing, main() can be called with an argument list to simulate
+    command-line arguments, eg:
+        main(['PROJID', '90', 'user1@foo.org,user2@foo.org'])
+
+    """
+    parser = ArgumentParser()
+    parser.add_argument("project")
+    parser.add_argument("threshold_days")
+    parser.add_argument("email_list")
+    parsed = parser.parse_args(args)
+
+    project_name = parsed.project
+    threshold_days_str = parsed.threshold_days
+    to_emails = string_to_list(parsed.email_list)
 
     try:
         threshold_days = int(threshold_days_str)

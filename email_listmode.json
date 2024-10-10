@@ -5,7 +5,7 @@
   "version": "1.1",
   "schema-version": "1.0",
   "type": "docker",
-  "command-line": "email_listmode #PROJECTID# #THRESHOLDDAYS# #EMAILLIST#",
+  "command-line": "email_listmode \"#PROJECTID#\" \"#THRESHOLDDAYS#\" \"#EMAILLIST#\"",
   "image": "ghcr.io/ucl-mirsg/drc-containers:latest",
   "override-entrypoint": true,
   "mounts": [],
