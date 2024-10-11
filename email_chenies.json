@@ -25,7 +25,7 @@
       "user-settable": true,
       "required": true,
       "replacement-key": "#MRPROJECTIDLIST#",
-      "default-value": "CHENIES_TRANSFER,CHENIES_MRI"
+      "default-value": "CHENIES_MRI"
     },
     {
       "name": "email-list",
