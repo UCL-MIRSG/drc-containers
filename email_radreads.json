@@ -2,7 +2,7 @@
   "name": "email-radreads",
   "description": "Send email listing sessions without radreads",
   "label": "Radreads email",
-  "version": "1.2",
+  "version": "1.3",
   "schema-version": "1.0",
   "type": "docker",
   "command-line": "email_radreads \"#PROJECTID#\" \"#EXCLUDESESSIONS#\" \"#EMAILLIST#\"",
@@ -63,6 +63,23 @@
           "required": true
         }
       ],
+      "output-handlers": []
+    },
+    {
+      "name": "cron-email-radreads-project",
+      "label": "Send radreads email (cron)",
+      "description": "Send email listing sessions requiring radreads (executed from cron event)",
+      "contexts": ["xnat:projectData"],
+      "external-inputs": [
+        {
+          "name": "project",
+          "description": "Input project",
+          "type": "Project",
+          "required": true,
+          "load-children": false
+        }
+      ],
+      "derived-inputs": [],
       "output-handlers": []
     }
   ]
