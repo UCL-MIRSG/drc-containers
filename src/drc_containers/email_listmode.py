@@ -257,7 +257,7 @@ def main(args=None):
     """Entrypoint for email_listmode, as listed in pyproject.toml.
 
     Args:
-        args: list of arguments. If not set these wil be read from the
+        args: list of arguments. If not set these will be read from the
             command-line
 
     When called by the container, this method is called with no arguments, so
