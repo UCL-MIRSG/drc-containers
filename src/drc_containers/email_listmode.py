@@ -72,7 +72,7 @@ def check_session(
                         file_size = file.size()
                         if int(file_size) < 1000000:
                             errors.append(
-                                f"LM File is too small " f"{file_label} - {file_size}"
+                                f"LM File is too small {file_label} - {file_size}"
                             )
                 except:  # noqa: E722
                     pass
@@ -172,8 +172,7 @@ def construct_email(
 
     for session in list_mode_records:
         link_form = (
-            f"{server_url}/data/projects/{project_name}"
-            f"/subjects/{session.subject_id}"
+            f"{server_url}/data/projects/{project_name}/subjects/{session.subject_id}"
         )
 
         body_html += f'<a href="{link_form}">Subject ID:{session.subject_id}</a> &nbsp; Scan Date:{session.date} Errors:{session.errors}<br>'
@@ -295,7 +294,7 @@ def main(args=None):
     try:
         threshold_days = int(threshold_days_str)
     except ValueError:
-        raise ValueError("Invalid input for threshold days: " "{threshold_days_str}")
+        raise ValueError("Invalid input for threshold days: {threshold_days_str}")
 
     credentials = XnatContainerCredentials()
 

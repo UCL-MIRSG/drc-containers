@@ -168,8 +168,7 @@ def construct_email_body(
         String containing the email body as HTML
     """
     body_html = (
-        "<p>The following sessions in the 1946 XNAT database require "
-        "radiology reads:"
+        "<p>The following sessions in the 1946 XNAT database require radiology reads:"
     )
 
     for session in session_records:
