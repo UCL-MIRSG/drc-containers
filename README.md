@@ -79,7 +79,7 @@ repository.
 
 ### For local testing: `generate_docker_label.py`
 
-This script generates a Docker label for the XNAT constainer service which is
+This script generates a Docker label for the XNAT container service which is
 equivalent to the one created by the GitHub Actions workflow. You do not need to
 run this script unless you wish to do so for testing purposes.
 
