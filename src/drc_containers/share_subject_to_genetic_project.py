@@ -14,9 +14,7 @@ def share_to_project(subject, other_project_id, debug=False):
             x for x in subject.sharing.values() if x.id == other_project_id
         ]
         if shared_to_project:
-            print(
-                f"{subject.label} is already shared with project " f"{other_project_id}"
-            )
+            print(f"{subject.label} is already shared with project {other_project_id}")
         if not shared_to_project:
             print(f"Sharing {subject.label} to {other_project_id}")
             if debug:
@@ -25,7 +23,7 @@ def share_to_project(subject, other_project_id, debug=False):
                 subject.share(other_project_id, label=subject.label)
     except Exception as ex:
         raise RuntimeError(
-            f"Exception {str(ex)} while trying to share " f"subject {subject.label}"
+            f"Exception {str(ex)} while trying to share subject {subject.label}"
         )
 
 
