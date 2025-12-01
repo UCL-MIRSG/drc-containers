@@ -27,7 +27,7 @@ jobs:
     steps:
       # Checkout the repository
       - name: Checkout repository
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Generate XNAT container service labels
         id: xnat-command-label
@@ -62,7 +62,7 @@ jobs:
       # custom nrg label in the build-push-action below
       - name: Extract metadata for Docker
         id: meta
-        uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f # v5
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           # labels: 'org.nrg.commands=${{ steps.xnat-command-label.outputs.nrglabel }}'
