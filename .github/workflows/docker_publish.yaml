@@ -64,7 +64,7 @@ jobs:
       # custom nrg label in the build-push-action below
       - name: Extract metadata for Docker
         id: meta
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
+        uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           # labels: 'org.nrg.commands=${{ steps.xnat-command-label.outputs.nrglabel }}'
