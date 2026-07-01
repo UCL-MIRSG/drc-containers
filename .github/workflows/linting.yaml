@@ -25,6 +25,6 @@ jobs:
       contents: read
     runs-on: ubuntu-slim
     steps:
-      - uses: UCL-MIRSG/.github/actions/linting@607b60294896f16c5ea3c37cdf5092a0021b56d4 # v0
+      - uses: UCL-MIRSG/.github/actions/linting@e4daf6da08d7b05e7442512fb07ae4c7d9bc1e99 # v0
         with:
           pre-commit-config: ./.pre-commit-config.yaml
