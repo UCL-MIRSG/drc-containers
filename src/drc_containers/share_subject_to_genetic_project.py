@@ -21,7 +21,7 @@ def share_to_project(subject, other_project_id, debug=False):
                 print("DEBUG MODE: no actual sharing will be performed")
             else:
                 subject.share(other_project_id, label=subject.label)
-    except Exception as ex:
+    except Exception as ex:  # noqa: BLE001
         raise RuntimeError(
             f"Exception {str(ex)} while trying to share subject {subject.label}"
         )
