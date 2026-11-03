@@ -1,6 +1,7 @@
 [project]
 dependencies = [
     "pandas",
+    "pytz",
     "pyxnat",
     "xnat",
 ]

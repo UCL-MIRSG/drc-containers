@@ -2,6 +2,7 @@ from argparse import ArgumentParser
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
+import pytz
 from pyxnat import Interface
 from pyxnat.core.resources import Experiments
 
@@ -30,7 +31,9 @@ class ListModeRecord:
 def get_recent_sessions(
     pyxnat_interface: Interface, datatype: str, threshold_days: int, project_name: str
 ) -> Experiments:
-    threshold_date = datetime.now() - timedelta(threshold_days)
+    threshold_date = datetime.now(pytz.timezone("Europe/London")) - timedelta(
+        threshold_days
+    )
     str_threshold_date = threshold_date.strftime("%Y-%m-%d")
     columns = [
         datatype + "/SESSION_ID",
