@@ -2,9 +2,9 @@ import re
 import sys
 
 from drc_containers.xnat_utils.xnat_credentials import (
-    open_xnat_session,
     XnatContainerCredentials,
     XnatCredentials,
+    open_xnat_session,
 )
 
 
@@ -21,9 +21,9 @@ def share_to_project(subject, other_project_id, debug=False):
                 print("DEBUG MODE: no actual sharing will be performed")
             else:
                 subject.share(other_project_id, label=subject.label)
-    except Exception as ex:
+    except Exception as ex:  # noqa: BLE001
         raise RuntimeError(
-            f"Exception {str(ex)} while trying to share subject {subject.label}"
+            f"Exception {ex!s} while trying to share subject {subject.label}"
         )
 
 
@@ -34,7 +34,7 @@ def share_subject_to_genetic_project(credentials: XnatCredentials, subject_id: s
         credentials: XNAT host name and user login details
         subject_id: ID of the subject to share
     """
-    site_pattern = re.compile("^GENFI_\d\d$")
+    site_pattern = re.compile(r"^GENFI_\d\d$")
 
     with open_xnat_session(credentials) as xnat_session:
         if subject_id not in xnat_session.subjects:

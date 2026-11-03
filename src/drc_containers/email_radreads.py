@@ -133,9 +133,9 @@ def get_sessions_needing_radread(
     rr_sessions = pyxnat_interface.select(
         "nshdni:radRead", ["nshdni:radRead/imagesession_id"]
     ).where(constraints)
-    sessions_with_radread = set(
+    sessions_with_radread = {
         r["nshdni_col_radreadimagesession_id"] for r in rr_sessions.data
-    )
+    }
 
     # Iterate through all session datatypes
     session_list = set()
@@ -189,9 +189,9 @@ def run_email_radreads(
     project_name: str,
     email_subject: str,
     to_emails: list[str],
-    cc_emails: list[str] = None,
-    bcc_emails: list[str] = None,
-    exclude_session_substrings: list[str] = [],
+    cc_emails: list[str] | None = None,
+    bcc_emails: list[str] | None = None,
+    exclude_session_substrings: list[str] | None = None,
     debug_output: bool = True,
 ):
     """Email notification about image sessions without radreads
@@ -216,6 +216,8 @@ def run_email_radreads(
         debug_output: set to True to output debugging data to the console
     """
 
+    if exclude_session_substrings is None:
+        exclude_session_substrings = []
     with open_pyxnat_session(credentials=credentials) as xnat_session:
         # Get list of SessionRecords describing sessions which require radread
         sessions_needing_radread = get_sessions_needing_radread(

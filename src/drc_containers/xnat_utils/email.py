@@ -6,8 +6,8 @@ def send_email(
     subject: str,
     content_html: str,
     to: list[str],
-    cc: list[str] = None,
-    bcc: list[str] = None,
+    cc: list[str] | None = None,
+    bcc: list[str] | None = None,
     debug_output: bool = True,
 ):
     """Use XNAT API to send an email

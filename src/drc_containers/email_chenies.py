@@ -7,9 +7,9 @@ from pyxnat.core.resources import Experiments
 from drc_containers.xnat_utils.command_line import string_to_list
 from drc_containers.xnat_utils.email import send_email
 from drc_containers.xnat_utils.xnat_credentials import (
-    open_pyxnat_session,
     XnatContainerCredentials,
     XnatCredentials,
+    open_pyxnat_session,
 )
 
 
@@ -73,9 +73,7 @@ def get_subject_labels(
     columns = [datatype + "/SUBJECT_LABEL", datatype + "/PROJECT"]
     constraints = [(datatype + "/project", "=", project_name), "AND"]
     sessions = pyxnat_interface.select(datatype, columns).where(constraints)
-    subjects = set(
-        [session["subject_label"].split("_", 1)[0] for session in sessions.data]
-    )
+    subjects = {session["subject_label"].split("_", 1)[0] for session in sessions.data}
 
     return subjects
 
@@ -118,8 +116,8 @@ def run_email_chenies(
     mr_projects: list[str],
     email_subject: str,
     to_emails: list[str],
-    cc_emails: list[str] = None,
-    bcc_emails: list[str] = None,
+    cc_emails: list[str] | None = None,
+    bcc_emails: list[str] | None = None,
 ):
     """Email notification about subjects which are missing phase 3 Chenies Mews
      data
