@@ -8,9 +8,9 @@ from pyxnat.core.resources import Experiments
 from drc_containers.xnat_utils.command_line import string_to_list
 from drc_containers.xnat_utils.email import send_email
 from drc_containers.xnat_utils.xnat_credentials import (
-    open_pyxnat_session,
     XnatContainerCredentials,
     XnatCredentials,
+    open_pyxnat_session,
 )
 
 
@@ -74,7 +74,7 @@ def check_session(
                             errors.append(
                                 f"LM File is too small {file_label} - {file_size}"
                             )
-                except:  # noqa: E722
+                except:  # noqa: E722, S110
                     pass
         elif res_label == "Norm":
             norm_found = True
@@ -185,8 +185,8 @@ def email_listmode(
     email_subject: str,
     to_emails: list[str],
     threshold_days: int = 90,
-    cc_emails: list[str] = None,
-    bcc_emails: list[str] = None,
+    cc_emails: list[str] | None = None,
+    bcc_emails: list[str] | None = None,
     debug_output: bool = True,
 ):
     """Email notification about image sessions with listmode errors
